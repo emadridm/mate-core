@@ -1,25 +1,32 @@
+import { Document } from '../api/storage';
+
 export enum AccountProvider {
-  Mate = 0,
-  Google,
-  Outlook,
-  Hotmail,
-  Live,
-  Yahoo,
-  Exchange,
-  Office365,
-  Drobox,
-  Github,
-  Other
+    Mate = 'Mate',
+    Google = 'Google',
+    Outlook = 'Outlook',
+    Exchange = 'Exchange',
 }
 
-export abstract class BaseAccount {
 
-  provider: AccountProvider;
-  name: string;
+export abstract class Account extends Document {
 
-  constructor(name: string) {
-    this.provider = AccountProvider.Mate;
-    this.name = name;
-  }
+    name: string;
+    provider: AccountProvider;
+
+    constructor(name: string) {
+        super();
+        this.name = name;
+        this.provider = AccountProvider.Mate;
+    }
+
+    static schema = {
+        name: 'Account',
+        properties: {
+            ...Document.schema.properties,
+            name: 'string',
+            provider: 'string',
+        },
+        primaryKey: Document.schema.primaryKey
+    }
 
 }

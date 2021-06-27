@@ -1,12 +1,14 @@
-import { App } from '../api'
+import { App } from '../api/app'
 import { LoadSettings } from '../api/settings';
 
-export async function InitApp(MateApp: new () => App, fileconf: string = App.fileSettings): Promise<App> {
+type AppClass = new () => App;
+
+export async function InitApp<T extends App>(MateApp: AppClass, fileconf: string = App.FilenameSettings): Promise<T> {
     let app = new MateApp(); // new app with default settings.
     try {
         app.settings = await LoadSettings(fileconf, app.settings);
     } catch (reason) {
         console.log(reason);
     }
-    return app;
+    return (app as T);
 }
