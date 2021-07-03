@@ -1,8 +1,7 @@
 import { App } from '../api/app';
 import { Account } from './account';
 import { ExchangeAccount } from './exchange';
-import { Binder } from '../api/storage';
-import Realm from 'realm';
+import { ConfigDB } from '../api/storage';
 
 export class AccountApp extends App {
 
@@ -10,23 +9,22 @@ export class AccountApp extends App {
         super();
     }
 
-    static AccountDB: Binder = {
+    static AccountDB: ConfigDB = {
         path: 'accounts',
         schema: [ExchangeAccount]
     }
 
-    async addAccount<T extends Account>(account: Account): Promise<T> {
-        Realm.defaultPath = this.pathResolve('accounts');
+    async addAccount<T extends Account>(account: T): Promise<Account> {
+        let result: Account | undefined;
         try {
-            const db = await Realm.open(AccountApp.AccountDB);
+            let db = await this.openDB(AccountApp.AccountDB);
             db.write(() => {
                 account.newID();
-                account = db.create<Account>(account.provider, account);
+                result = db.create<Account>(account.provider, account);
             })
-            db.close();
         } catch (reason) {
             console.log(reason);
         }
-        return (account as T);
+        return (result as Account);
     }
 }

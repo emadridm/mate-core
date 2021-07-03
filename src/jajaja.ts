@@ -1,4 +1,4 @@
-import Realm, { BSON } from 'realm';
+import Realm from 'realm';
 import os from 'os';
 import path from 'path';
 
@@ -7,79 +7,84 @@ const TaskSchema = {
     properties: {
         _id: "objectId",
         name: "string",
-        status: "string?",
+        status: "string",
     },
     primaryKey: "_id",
 };
 
-class Task {
-    _id?: BSON.ObjectId
+abstract class Task {
+    _id?: Realm.BSON.ObjectId
     name: string = '';
-    status?: string;
-
+    status: string = 'new';
     constructor() {
 
     }
 }
 
-function mainNew() {
-    const db = new Realm({
-        path: path.resolve(os.homedir(), '.mate', 'jajaja'),
-        schema: [TaskSchema],
-    });
+class ProjectTask extends Task {
+    date?: string = '';
+    constructor() {
+        super();
+    }
+}
 
-    let task = new Task();
-    task._id = new BSON.ObjectId();
-    task.name = "go exercise";
-    task.status = 'Open';
 
-    db.write(() => {
-        task = db.create<Task>("Task", task);
-        console.log(`created three tasks: ${task.name} `);
-    });
-    db.close();
+function pad2(n: number) { return n < 10 ? '0' + n : n }
+
+var date = new Date();
+
+const timestamp = date.getFullYear().toString() +
+    pad2(date.getMonth() + 1) +
+    pad2(date.getDate()) +
+    pad2(date.getHours()) +
+    pad2(date.getMinutes()) +
+    pad2(date.getSeconds());
+
+
+const dbFile = path.resolve(os.homedir(), 'mate', `jajaja-${timestamp}.realm`);
+
+async function createTask(task: Task): Promise<Task | undefined> {
+    var result: Task | undefined;
+    try {
+        const db = await Realm.open({
+            path: dbFile,
+            schema: [TaskSchema],
+        });
+        db.write(() => {
+            result = db.create<Task>('Task', task);
+            // console.log(`created three taspks: ${result.name} and ${result.status}`);
+        });
+        // db.close();
+    } catch (reason) {
+        console.log(reason);
+    }
+    return (result);
 }
 
 async function mainOpen() {
     try {
-        // Realm.defaultPath = path.resolve(os.homedir(), '.mate');
-        const db = await Realm.open({
-            path: path.resolve(os.homedir(), 'mate', 'jajaja.realm'),
-            schema: [TaskSchema],
-        });
 
-        let task1, task2, task3: Task;
+        let ptask1 = new ProjectTask();
+        ptask1._id = new Realm.BSON.ObjectId();
+        ptask1.name = "go exercise";
+        ptask1.status = 'Open';
+        ptask1.date = 'Tomorrow';
 
-        let task = new Task();
-        task._id = new BSON.ObjectId();
-        task.name = "go exercise";
-        task.status = 'Open';
+        let ptask2 = {
+            _id: new Realm.BSON.ObjectId(),
+            name: 'go cicling',
+            status: 'closed'
+        }
 
-        task3 = new Task();
-        task3._id = new BSON.ObjectId();
-        task3.name = "go clicling";
-        task3.status = 'never';
-
-        db.write(() => {
-            task1 = db.create<Task>('Task', {
-                _id: new BSON.ObjectID(),
-                name: "go grocery shopping",
-                status: "Open",
-            });
-            task2 = db.create<Task>("Task", task);
-            task3 = db.create<Task>('Task', task3);
-            console.log(`created three tasks: ${task1.name} & ${task2.name} & ${task3.name}`);
-        });
-        db.close();
-    } catch (reason) {
-        console.log(reason);
-    } finally {
-        console.log('this is the end!');
+        let task = await createTask(ptask2);
+        if (task) {
+            console.log(`created three tasks: ${task.name} and ${task.status}`);
+        }
+    } catch (e) {
+        console.log(e);
     }
 }
 
 mainOpen().finally(() => {
     process.exit(0);
 })
-
-// mainNew();
