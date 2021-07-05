@@ -85,6 +85,4 @@ async function mainOpen() {
     }
 }
 
-mainOpen().finally(() => {
-    process.exit(0);
-})
+mainOpen();

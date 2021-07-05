@@ -29,8 +29,8 @@
   },
   "homepage": "https://github.com/emadridm/mate-core#readme",
   "devDependencies": {
-    "@types/node": "^15.12.5",
-    "typescript": "^4.3.4"
+    "@types/node": "^16.0.0",
+    "typescript": "^4.3.5"
   },
   "dependencies": {
     "realm": "^10.5.0"
