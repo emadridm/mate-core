@@ -29,7 +29,11 @@
   },
   "homepage": "https://github.com/emadridm/mate-core#readme",
   "devDependencies": {
+    "@types/chai": "^4.2.19",
+    "@types/mocha": "^8.2.2",
     "@types/node": "^16.0.0",
+    "chai": "^4.3.4",
+    "mocha": "^9.0.2",
     "typescript": "^4.3.5"
   },
   "dependencies": {

@@ -7,16 +7,14 @@ export enum AccountProvider {
     Exchange = 'Exchange',
 }
 
-
 export abstract class Account extends Document {
 
+    provider: AccountProvider = AccountProvider.Mate;
     name: string;
-    provider: AccountProvider;
 
     constructor(name: string) {
         super();
         this.name = name;
-        this.provider = AccountProvider.Mate;
     }
 
     static schema = {

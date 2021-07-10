@@ -1,6 +1,5 @@
 import { AccountProvider, Account } from './account';
 
-
 export class ExchangeAccount extends Account {
 
     address?: string;

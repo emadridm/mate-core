@@ -2,7 +2,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { Settings } from './settings';
 import Realm from 'realm';
-import { ConfigDB, HashOfDBs } from './storage';
+import { ConfigDB, DocumentClass, Document, HashOfDBs } from './storage';
 
 export abstract class App {
 
@@ -18,9 +18,6 @@ export abstract class App {
     }
 
     settings: Settings = App.DefaultSettings;
-
-    constructor() {
-    }
 
     pathResolve(...pathSegments: string[]) {
         return path.resolve(this.settings.home, ...pathSegments);
@@ -46,4 +43,28 @@ export abstract class App {
         this.closeDBs();
     }
 
+    newDocument<T extends Document>(schemas: DocumentClass<T>[], name: string, ...props: any): T {
+        for (let klass of schemas) {
+            if (name === klass.schema.name) {
+                return new klass(props)
+            }
+        }
+        throw (`Document class ${name} does not exists!`);
+    }
+
+    async createDocument<T extends Document>(archive: ConfigDB, binder: string, document: T): Promise<Document> {
+        try {
+            let db = await this.openDB(archive);
+            let result: Document = (document as Document);
+            db.write(() => {
+                document.newID();
+                result = db.create<Document>(binder, document);
+            })
+            console.log(`Document created!`);
+            return (result as T);
+        } catch (reason) {
+            console.log(reason);
+            throw (`Document can not be created!`);
+        }
+    }
 }
