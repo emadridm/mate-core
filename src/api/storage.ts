@@ -3,7 +3,7 @@ import Realm from "realm";
 export type ConfigDB = Required<Pick<Realm.Configuration, 'path' | 'schema'>>;
 export type HashOfDBs = { [s: string]: Realm };
 
-export interface DocumentClass<T> extends Realm.ObjectClass {
+export interface DocumentClass<T extends Document> extends Realm.ObjectClass {
     new(...props: any): T
 }
 

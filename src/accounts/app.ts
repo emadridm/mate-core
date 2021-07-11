@@ -18,9 +18,15 @@ export class AccountApp extends App {
         schema: AccountApp.AccountSchemas
     }
 
-    async createAccount(provider: string, ...props: any) {
-        let account = this.newDocument<Account>(AccountApp.AccountSchemas, provider, props);
-        return await this.createDocument<Account>(AccountApp.AccountDB, provider, account);
+    async createAccount(provider: string, ...props: any[]): Promise<Account> {
+        let account = this.newDocument<Account>(AccountApp.AccountSchemas,
+            provider,
+            ...props);
+        let document = await this.createDocument<Account>(AccountApp.AccountDB,
+            provider,
+            account
+        );
+        return (document as Account);
     }
 
 }
