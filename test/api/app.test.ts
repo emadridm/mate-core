@@ -1,8 +1,5 @@
-import * as chai from 'chai';
 import { App } from '../../src/api/app';
 import { Document } from '../../src/api/storage'
-
-const expect = chai.expect;
 
 class TestApp extends App {
 
@@ -27,33 +24,33 @@ describe('api/app', () => {
 
     let app = new TestApp();
 
-    after(() => {
+    afterAll(() => {
         app.close();
     })
 
     describe('newDocument', () => {
 
-        it('should create a new instance Class1 with schema named "Class1"', () => {
-            expect(app.newDocument<Document>(SCHEMAS, 'DocumentA')).to.be.instanceOf(DocumentA);
+        test('should create a new instance DocumentA with schema named "DocumentA"', () => {
+            expect(app.newDocument<Document>(SCHEMAS, 'DocumentA')).toBeInstanceOf(DocumentA);
         })
 
-        it('should create a new instance Class2 with schema named "Class2"', () => {
-            expect(app.newDocument<Document>(SCHEMAS, 'DocumentB')).to.be.instanceOf(DocumentB);
+        test('should create a new instance DocumentB with schema named "DocumentB"', () => {
+            expect(app.newDocument<Document>(SCHEMAS, 'DocumentB')).toBeInstanceOf(DocumentB);
         })
 
     })
 
     describe('createDocument', () => {
 
-        it('should return a new instance DocumentA', () => {
+        test('should return a new instance DocumentA', async () => {
             return app.createDocument(ARCHIVE, 'DocumentA', new DocumentA()).then((doc) => {
-                expect(doc).to.be.instanceOf(DocumentA)
+                expect(doc).toBeInstanceOf(DocumentA);
             })
         })
 
-        it('should return a new instance DocumentB', () => {
+        test('should return a new instance DocumentB', async () => {
             return app.createDocument(ARCHIVE, 'DocumentB', new DocumentB()).then((doc) => {
-                expect(doc).to.be.instanceOf(DocumentB)
+                expect(doc).toBeInstanceOf(DocumentB)
             })
         })
 

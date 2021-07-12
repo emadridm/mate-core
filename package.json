@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "types": "/lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -29,11 +29,10 @@
   },
   "homepage": "https://github.com/emadridm/mate-core#readme",
   "devDependencies": {
-    "@types/chai": "^4.2.19",
-    "@types/mocha": "^8.2.2",
+    "@types/jest": "^26.0.24",
     "@types/node": "^16.0.0",
-    "chai": "^4.3.4",
-    "mocha": "^9.0.2",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.3",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
