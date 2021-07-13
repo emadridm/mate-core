@@ -1,5 +1,5 @@
 import { App } from '../../src/api/app';
-import { Document } from '../../src/api/storage'
+import { Document } from '../../src/api/storage';
 
 class TestApp extends App {
 
@@ -30,11 +30,11 @@ describe('api/app', () => {
 
     describe('newDocument', () => {
 
-        test('should create a new instance DocumentA with schema named "DocumentA"', () => {
+        it('should create a new instance DocumentA with schema named "DocumentA"', () => {
             expect(app.newDocument<Document>(SCHEMAS, 'DocumentA')).toBeInstanceOf(DocumentA);
         })
 
-        test('should create a new instance DocumentB with schema named "DocumentB"', () => {
+        it('should create a new instance DocumentB with schema named "DocumentB"', () => {
             expect(app.newDocument<Document>(SCHEMAS, 'DocumentB')).toBeInstanceOf(DocumentB);
         })
 
@@ -42,13 +42,13 @@ describe('api/app', () => {
 
     describe('createDocument', () => {
 
-        test('should return a new instance DocumentA', async () => {
+        it('should return a new instance DocumentA', async () => {
             return app.createDocument(ARCHIVE, 'DocumentA', new DocumentA()).then((doc) => {
                 expect(doc).toBeInstanceOf(DocumentA);
             })
         })
 
-        test('should return a new instance DocumentB', async () => {
+        it('should return a new instance DocumentB', async () => {
             return app.createDocument(ARCHIVE, 'DocumentB', new DocumentB()).then((doc) => {
                 expect(doc).toBeInstanceOf(DocumentB)
             })

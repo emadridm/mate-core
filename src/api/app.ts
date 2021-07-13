@@ -25,7 +25,7 @@ export abstract class App {
 
     protected async openDB(config: ConfigDB): Promise<Realm> {
         let key = config.path;
-        if (this._dbs[key] == undefined) {
+        if (this._dbs[key] === undefined) {
             config.path = this.pathResolve(config.path);
             this._dbs[key] = await Realm.open(config);
         }
