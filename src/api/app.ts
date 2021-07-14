@@ -43,13 +43,13 @@ export abstract class App {
         this.closeDBs();
     }
 
-    newDocument<T extends Document>(schemas: DocumentClass<T>[], name: string, ...props: any[]): T {
+    newDocument<T extends Document>(schemas: DocumentClass<T>[], schemaName: string, ...props: any[]): T {
         for (let klass of schemas) {
-            if (name === klass.schema.name) {
+            if (schemaName === klass.schema.name) {
                 return new klass(...props)
             }
         }
-        throw (`Document class ${name} does not exists!`);
+        throw (`Document class ${schemaName} does not exists!`);
     }
 
     async createDocument<T extends Document>(archive: ConfigDB, binder: string, document: T): Promise<Document> {
