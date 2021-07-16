@@ -29,4 +29,8 @@ export class AccountApp extends App {
         return (document as Account);
     }
 
+    async readAccounts() {
+        return [{}];
+    }
+
 }
