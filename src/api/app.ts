@@ -2,7 +2,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { Settings } from './settings';
 import Realm from 'realm';
-import { ConfigDB, DocumentClass, Document, HashOfDBs } from './storage';
+import { ConfigDB, DocumentClass, Document, HashOfDBs, Archive } from './storage';
 
 export abstract class App {
 
@@ -65,6 +65,21 @@ export abstract class App {
         } catch (reason) {
             console.log(reason);
             throw (`Document can not be created!`);
+        }
+    }
+
+    async readDocuments<T extends Document>(archive: Archive, schemaName: string): Promise<T[]> {
+        try {
+            // let result: Document[] = [];
+            let binder = await this.openDB(archive);
+            // binder.objects<Document>(schemaName).snapshot().forEach((document) => {
+            //     result.push(document);
+            // })
+            // return (result as T[]);
+            return ((binder.objects<Document>(schemaName).snapshot() as unknown) as T[])
+        } catch (reason) {
+            console.log(reason);
+            throw (`Documents ${schemaName} in ${archive.path} can not be readed!`);
         }
     }
 }

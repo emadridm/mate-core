@@ -56,4 +56,14 @@ describe('api/app', () => {
 
     })
 
+    describe('readDocuments', () => {
+
+        it.only('should return an array of documents', async () => {
+            await app.createDocument(ARCHIVE, 'DocumentA', new DocumentA());
+            return app.readDocuments(ARCHIVE, 'DocumentA').then((result) => {
+                expect(result.length).toBe(1);
+            })
+        })
+    })
+
 });

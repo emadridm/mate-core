@@ -1,7 +1,7 @@
 import { App } from '../api/app';
 import { Account } from './account';
 import { ExchangeAccount } from './exchange';
-import { ConfigDB } from '../api/storage';
+import { ConfigDB, Archive } from '../api/storage';
 
 
 export class AccountApp extends App {
@@ -29,8 +29,8 @@ export class AccountApp extends App {
         return (document as Account);
     }
 
-    // async readAccounts() {
-    //     return [{}];
-    // }
+    async readAccounts(): Promise<Account[]> {
+        return (this.readDocuments<Account>(AccountApp.AccountDB as Archive, 'Exchange'));
+    }
 
 }
