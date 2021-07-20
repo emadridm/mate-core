@@ -1,5 +1,5 @@
-import { App } from '../api/app'
-import { LoadSettings } from '../api/settings';
+import { App } from '../base/app'
+import { LoadSettings } from '../base/settings';
 
 type AppClass = new () => App;
 

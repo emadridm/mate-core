@@ -1,10 +1,9 @@
-import { Document } from '../api/storage';
+import { Document } from '../base/archive';
 
 export enum AccountProvider {
     Mate = 'Mate',
-    Google = 'Google',
-    Outlook = 'Outlook',
     Exchange = 'Exchange',
+    Google = 'Google'
 }
 
 export abstract class Account extends Document {
@@ -17,14 +16,11 @@ export abstract class Account extends Document {
         this.name = name;
     }
 
-    static schema = {
+    static schema = Account.extendsSchema(Document.schema, {
         name: 'Account',
         properties: {
-            ...Document.schema.properties,
             name: 'string',
             provider: 'string',
-        },
-        primaryKey: Document.schema.primaryKey
-    }
-
+        }
+    });
 }

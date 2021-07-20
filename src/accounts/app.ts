@@ -1,7 +1,9 @@
-import { App } from '../api/app';
+import { App } from '../base/app';
+import { Archive } from '../base/archive';
 import { Account } from './account';
-import { ExchangeAccount } from './exchange';
-import { ConfigDB, Archive } from '../api/storage';
+import MateAccount from './mate'
+import ExchangeAccount from './exchange';
+import GoogleAccount from './google';
 
 
 export class AccountApp extends App {
@@ -10,27 +12,27 @@ export class AccountApp extends App {
         super();
     }
 
-    static AccountSchemas = [ExchangeAccount];
-    static AccountSchemaNames = AccountApp.AccountSchemas.map<string>((klass) => { return klass.schema.name });
+    static SCHEMAS = [MateAccount, ExchangeAccount, GoogleAccount];
+    static SLABELS = AccountApp.SCHEMAS.map<string>((klass) => { return klass.schema.name });
 
-    static AccountDB: ConfigDB = {
+    static ARCHIVE: Archive = {
         path: 'accounts',
-        schema: AccountApp.AccountSchemas
+        schema: AccountApp.SCHEMAS
     }
 
     async createAccount(provider: string, ...props: any[]): Promise<Account> {
-        let account: Account = this.newDocument<Account>(AccountApp.AccountSchemas,
+        let account: Account = this.newDocument<Account>(AccountApp.SCHEMAS,
             provider,
             ...props);
-        let document = await this.createDocument<Account>(AccountApp.AccountDB,
+        let document = await this.createDocument<Account>(AccountApp.ARCHIVE,
             provider,
             account
         );
         return (document as Account);
     }
 
-    async readAccounts(): Promise<Account[]> {
-        return (this.readDocuments<Account>(AccountApp.AccountDB as Archive, 'Exchange'));
+    async readAccounts(provider: string): Promise<Account[]> {
+        return (this.readDocuments<Account>(AccountApp.ARCHIVE, provider));
     }
 
 }

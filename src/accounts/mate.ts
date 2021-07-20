@@ -1,22 +1,21 @@
 import { AccountProvider, Account } from './account';
 
-export default class ExchangeAccount extends Account {
+export default class MateAccount extends Account {
 
-    address?: string;
     username?: string;
     password?: string;
 
     constructor(name: string) {
         super(name);
-        this.provider = AccountProvider.Exchange;
+        this.provider = AccountProvider.Mate;
     }
 
-    static schema = ExchangeAccount.extendsSchema(Account.schema, {
-        name: 'Exchange',
+    static schema = MateAccount.extendsSchema(Account.schema, {
+        name: 'Mate',
         properties: {
-            address: 'string?',
             username: 'string?',
             password: 'string?'
         }
-    })
+    });
+
 }
