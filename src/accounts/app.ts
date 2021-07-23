@@ -13,7 +13,7 @@ export class AccountApp extends App {
     }
 
     static SCHEMAS = [MateAccount, ExchangeAccount, GoogleAccount];
-    static SLABELS = AccountApp.SCHEMAS.map<string>((klass) => { return klass.schema.name });
+    static BINDERS = AccountApp.SCHEMAS.map<string>((klass) => { return klass.schema.name });
 
     static ARCHIVE: Archive = {
         path: 'accounts',

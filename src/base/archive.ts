@@ -13,6 +13,10 @@ export abstract class Document {
 
     _id?: Realm.BSON.ObjectId;
 
+    get id() {
+        return this._id?.toHexString();
+    }
+
     newID() {
         this._id = this._id || new Realm.BSON.ObjectID();
     }
@@ -25,7 +29,7 @@ export abstract class Document {
         primaryKey: '_id'
     }
 
-    static extendsSchema<B extends Realm.ObjectSchema, X extends Realm.ObjectSchema>(base: B, prop: X): B & X {
+    static extendsSchema<B extends Realm.ObjectSchema, X extends Partial<Realm.ObjectSchema>>(base: B, prop: X): B & X {
         return _.merge({}, base, prop);
     }
 }

@@ -1,6 +1,7 @@
 import * as os from 'os';
 import * as path from 'path';
 import { Settings } from './settings';
+import Realm from 'realm';
 import { Archive, DocumentClass, Document } from './archive';
 
 type Session = { [s: string]: Realm };
@@ -25,17 +26,19 @@ export abstract class App {
     }
 
     protected async openArchive(archive: Archive): Promise<Realm> {
-        let key = archive.path;
-        if (this._archives[key] === undefined) {
-            archive.path = this.pathResolve(archive.path);
-            this._archives[key] = await Realm.open(archive);
+        if (this._archives[archive.path] === undefined) {
+            const config: Archive = {
+                path: this.pathResolve(archive.path),
+                schema: archive.schema
+            }
+            this._archives[archive.path] = await Realm.open(config);
         }
-        return this._archives[key];
+        return this._archives[archive.path];
     }
 
-    protected closeArchives() {
-        Object.values<Realm>(this._archives).forEach((db) => {
-            db.close();
+    public closeArchives() {
+        Object.values<Realm>(this._archives).forEach((realm) => {
+            realm.close();
         })
         this._archives = {};
     }

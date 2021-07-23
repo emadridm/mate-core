@@ -1,53 +1,31 @@
 // https://github.com/realm/realm-js/issues/370#issuecomment-270849466
 
 const bson = require('bson');
+const util = require('util');
 
 const getSchemaName = (schema) => {
   if (schema['schema'] !== undefined) {
     return schema.schema.name;
   }
   return schema.name;
-}
+};
 
 class Realm {
 
-  constructor(params) {
-    this.schema = {};
-    this.callbackList = [];
-    this.data = {};
-    this.schemaCallbackList = {};
-    params.schema.forEach((schema) => {
+  constructor(config) {
+    this.close();
+    config.schema.forEach((schema) => {
       this.data[getSchemaName(schema)] = {};
-    });
-    params.schema.forEach((schema) => {
-      // console.log("Realm.constructor is registring schema called " + getSchemaName(schema));
       this.schema[getSchemaName(schema)] = schema;
     });
-    this.lastLookedUpModel = null;
   }
 
   close() {
+    this.data = {};
     this.schema = {};
     this.callbackList = [];
-    this.data = {};
     this.schemaCallbackList = {};
-  }
-
-  objects(schemaName) {
-    this.lastLookedUpModel = schemaName;
-    const objects = Object.values(this.data[schemaName]);
-    objects.values = () => objects;
-    objects.sorted = () => this.compareFunc ? objects.sort(this.compareFunc) : objects.sort();
-    objects.addListener = (cb) => {
-      if (this.schemaCallbackList[schemaName]) {
-        this.schemaCallbackList[schemaName].push(cb);
-      } else {
-        this.schemaCallbackList[schemaName] = [cb];
-      }
-    };
-    objects.removeListener = () => {};
-    objects.filtered = this.filtered ? this.filtered.bind(this, schemaName) : () => objects;
-    return objects;
+    this.lastLookedUpModel = null;
   }
 
   write(fn) {
@@ -57,8 +35,11 @@ class Realm {
   }
 
   create(schemaName, object) {
+
     const modelObject = object;
     // console.log("Realm.create is called with schemaName equal to " + schemaName);
+    // console.log(util.inspect(modelObject));
+
     const properties = this.schema[schemaName].schema.properties;
     Object.keys(properties).forEach((key) => {
       if (modelObject[key] && modelObject[key].model) {
@@ -94,8 +75,41 @@ class Realm {
       }
       this.callbackList.forEach((cb) => { cb(); });
     }
+
+    // console.log("this.data");
+    // console.log(util.inspect(this.data));
+
+    // console.log("this.schema");
+    // console.log(util.inspect(this.schema));
+
     return modelObject;
   }
+
+  objects(schemaName) {
+    this.lastLookedUpModel = schemaName;
+
+    // console.log("this.data");
+    // console.log(util.inspect(this.data));
+
+    // console.log(`this.data[${schemaName}]`);
+    // console.log(util.inspect(this.data[schemaName]));
+
+    const objects = Object.values(this.data[schemaName]);
+    objects.values = () => objects;
+    objects.sorted = () => this.compareFunc ? objects.sort(this.compareFunc) : objects.sort();
+    objects.addListener = (cb) => {
+      if (this.schemaCallbackList[schemaName]) {
+        this.schemaCallbackList[schemaName].push(cb);
+      } else {
+        this.schemaCallbackList[schemaName] = [cb];
+      }
+    };
+    objects.removeListener = () => {};
+    objects.filtered = this.filtered ? this.filtered.bind(this, schemaName) : () => objects;
+    objects.snapshot = () => objects;
+    return objects;
+  }
+
 
   objectForPrimaryKey(model, id) {
     this.lastLookedUpModel = model;
@@ -153,9 +167,9 @@ Realm.Object = class Object {
   isValid() { return true; }
 };
 
-Realm.open = (params) => {
+Realm.open = (config) => {
   return new Promise((resolve) => {
-    resolve(new Realm(params));
+    resolve(new Realm(config));
   });
 }
 

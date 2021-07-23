@@ -1,16 +1,20 @@
-import { App } from '../../src/api/app';
-import { Document } from '../../src/api/storage';
+import { App } from '../../src/base/app';
+import { Document } from '../../src/base/archive';
 
 class TestApp extends App {
 
 }
 
 class DocumentA extends Document {
-    static schema = Object.assign({}, Document.schema, { name: 'DocumentA' });
+    static schema = DocumentA.extendsSchema(Document.schema, {
+        name: 'DocumentA'
+    });
 }
 
 class DocumentB extends Document {
-    static schema = Object.assign({}, Document.schema, { name: 'DocumentB' });
+    static schema = DocumentB.extendsSchema(Document.schema, {
+        name: 'DocumentB'
+    });
 }
 
 const SCHEMAS = [DocumentA, DocumentB];
@@ -42,6 +46,10 @@ describe('api/app', () => {
 
     describe('createDocument', () => {
 
+        beforeEach(() => {
+            app.closeArchives();
+        })
+
         it('should return a new instance DocumentA', async () => {
             return app.createDocument(ARCHIVE, 'DocumentA', new DocumentA()).then((doc) => {
                 expect(doc).toBeInstanceOf(DocumentA);
@@ -58,12 +66,17 @@ describe('api/app', () => {
 
     describe('readDocuments', () => {
 
-        it.only('should return an array of documents', async () => {
+        beforeEach(() => {
+            app.closeArchives();
+        })
+
+        it('should return an array of documents', async () => {
             await app.createDocument(ARCHIVE, 'DocumentA', new DocumentA());
             return app.readDocuments(ARCHIVE, 'DocumentA').then((result) => {
-                expect(result.length).toBe(1);
+                expect(result.length).toBe(1)
             })
         })
+
     })
 
 });
