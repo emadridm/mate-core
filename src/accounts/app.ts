@@ -1,30 +1,28 @@
-import { App } from '../base/app';
-import { Archive } from '../base/archive';
+import { BaseApp, Archive } from '../base'
 import { Account } from './account';
-import MateAccount from './mate'
-import ExchangeAccount from './exchange';
-import GoogleAccount from './google';
+import { MateAccount } from './mate'
+import { ExchangeAccount } from './exchange';
+import { GoogleAccount } from './google';
 
-
-export class AccountApp extends App {
+export class App extends BaseApp {
 
     constructor() {
         super();
     }
 
     static SCHEMAS = [MateAccount, ExchangeAccount, GoogleAccount];
-    static BINDERS = AccountApp.SCHEMAS.map<string>((klass) => { return klass.schema.name });
+    static BINDERS = App.SCHEMAS.map<string>((klass) => { return klass.schema.name });
 
     static ARCHIVE: Archive = {
         path: 'accounts',
-        schema: AccountApp.SCHEMAS
+        schema: App.SCHEMAS
     }
 
     async createAccount(provider: string, ...props: any[]): Promise<Account> {
-        let account: Account = this.newDocument<Account>(AccountApp.SCHEMAS,
+        let account: Account = this.newDocument<Account>(App.SCHEMAS,
             provider,
             ...props);
-        let document = await this.createDocument<Account>(AccountApp.ARCHIVE,
+        let document = await this.createDocument<Account>(App.ARCHIVE,
             provider,
             account
         );
@@ -32,7 +30,7 @@ export class AccountApp extends App {
     }
 
     async readAccounts(provider: string): Promise<Account[]> {
-        return (this.readDocuments<Account>(AccountApp.ARCHIVE, provider));
+        return (this.readDocuments<Account>(App.ARCHIVE, provider));
     }
 
 }

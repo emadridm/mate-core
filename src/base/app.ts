@@ -1,25 +1,25 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Settings } from './settings';
 import Realm from 'realm';
+import { Settings } from './settings';
 import { Archive, DocumentClass, Document } from './archive';
 
 type Session = { [s: string]: Realm };
 
-export abstract class App {
+export abstract class BaseApp {
 
     private _archives: Session = {};
 
     static Name = 'mate';
     static Home = os.homedir() || '';
 
-    static FilenameSettings = path.resolve(App.Home, `.${App.Name}.json`);
+    static FilenameSettings = path.resolve(BaseApp.Home, `.${BaseApp.Name}.json`);
 
     static DefaultSettings: Settings = {
-        home: path.resolve(App.Home, `.${App.Name}`),
+        home: path.resolve(BaseApp.Home, `.${BaseApp.Name}`),
     }
 
-    settings: Settings = App.DefaultSettings;
+    settings: Settings = BaseApp.DefaultSettings;
 
     pathResolve(...pathSegments: string[]) {
         return path.resolve(this.settings.home, ...pathSegments);

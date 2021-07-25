@@ -1,6 +1,6 @@
 import { AccountProvider, Account } from './account';
 
-export default class ExchangeAccount extends Account {
+export class ExchangeAccount extends Account {
 
     address?: string;
     username?: string;

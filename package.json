@@ -30,15 +30,15 @@
   "homepage": "https://github.com/emadridm/mate-core#readme",
   "devDependencies": {
     "@types/jest": "^26.0.24",
-    "@types/node": "^16.0.0",
+    "@types/node": "^16.4.2",
     "jest": "^27.0.6",
-    "ts-jest": "^27.0.3",
+    "ts-jest": "^27.0.4",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {
     "@types/lodash": "^4.14.171",
     "lodash": "^4.17.21",
-    "realm": "^10.5.0"
+    "realm": "^10.6.0"
   }
 }

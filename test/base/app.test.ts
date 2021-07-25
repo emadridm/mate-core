@@ -1,7 +1,6 @@
-import { App } from '../../src/base/app';
-import { Document } from '../../src/base/archive';
+import { BaseApp, Document } from '../../src/base';
 
-class TestApp extends App {
+class TestApp extends BaseApp {
 
 }
 

@@ -1,6 +1,6 @@
 import { AccountProvider, Account } from './account';
 
-export default class MateAccount extends Account {
+export class MateAccount extends Account {
 
     username?: string;
     password?: string;

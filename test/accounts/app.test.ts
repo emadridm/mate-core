@@ -1,8 +1,8 @@
-import { AccountApp, ExchangeAccount } from '../../src/accounts';
+import { App, ExchangeAccount } from '../../src/accounts';
 
 describe('accounts/app', () => {
 
-    let app = new AccountApp();
+    let app = new App();
 
     afterAll(() => {
         app.close();

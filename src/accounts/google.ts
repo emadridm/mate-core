@@ -1,6 +1,6 @@
 import { AccountProvider, Account } from './account';
 
-export default class GoogleAccount extends Account {
+export class GoogleAccount extends Account {
 
     address?: string;
     phone?: string;
