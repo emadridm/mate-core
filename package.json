@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.171",
+    "ews-javascript-api": "^0.10.3",
     "lodash": "^4.17.21",
     "realm": "^10.6.0"
   }
